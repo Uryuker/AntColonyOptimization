@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.organization
+
+import io.sarl.core.Initialize
+import io.sarl.core.Destroy
+
+agent Ant {
+	
+	uses move,setPheromon,searchNextEdge
+	
+	on Initialize {
+		
+	}
+	on Destroy{
+		
+	}
+	
+	
+	
+}

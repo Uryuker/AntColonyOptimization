@@ -1,0 +1,81 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.organization
+
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Lifecycle
+
+
+capacity Capicities {
+	
+	def move(n : Node)
+	def searchNextEdge()
+	
+}
+
+capacity EnvCapacities{
+	
+	def updatePheromon()
+	def updateGraph()
+	def listNextNode()
+	
+}
+
+skill EnvSkill implements EnvCapacities{
+	
+	override updatePheromon(){
+		
+		var listEdge = graph.listEdge()
+		
+		for(e : listEdge){
+			
+			e.pheromon = ((e.pheromon * tauxEvap )+ (e.AntCount() * 0.1))   
+		} 
+		
+	}
+	
+	override updateGraph {
+		// TODO Auto-generated action.
+	}
+	
+	override listNextNode {
+		// TODO Auto-generated action.
+	}
+	
+}
+
+
+skill Skill implements Capicities{
+	
+	var previousNode : new Node()
+	
+	var actualNode : new Node()
+	
+	
+	
+	override move(n: Node){
+		previousNode = actualNode
+		actualNode = n
+	}
+	
+	override searchNextEdge(){
+		//algo recherche prochain edge
+		var listEdge = actualNode.listEdge()
+		var nextEdge : new Edge()
+		var p : float
+		for(e : listEdge)) {
+			float max
+			max = p
+			p = (e.pheromon * 1/e.distance) / (listEdge.totalPheromon * 1/listEdge.totalDistance)
+			if max < p{
+				max = p
+				nextEdge = e
+			}
+		}
+		
+		}
+	
+	
+}
