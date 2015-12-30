@@ -30,7 +30,7 @@ public class SettingsPanel implements ActionListener {
 	private JTextField antValue = new JTextField();
 	private JTextField connexityValue = new JTextField();
 	private JTextField pheromonesValue = new JTextField();
-	private JTextField edgeNumber = new JTextField();
+	private JTextField nodeNumber = new JTextField();
 	private JSlider antSlider ;
 	private JSlider pheromonesSlider;
 	private JSlider connexitySlider;
@@ -140,9 +140,9 @@ public class SettingsPanel implements ActionListener {
 		this.pheromonesSlider.addChangeListener(pheromonesListener);
 		
 		//Graph gneration settings
-		//Edge Number text field
-		this.edgeNumber.setText("10");
-		this.edgeNumber.setPreferredSize(new Dimension(100, 15));
+		//Node Number text field
+		this.nodeNumber.setText("10");
+		this.nodeNumber.setPreferredSize(new Dimension(100, 15));
 		
 		//Connexity slider
 		this.connexitySlider = new JSlider(0, 100);
@@ -252,16 +252,16 @@ public class SettingsPanel implements ActionListener {
 		this.settingsPanel.add(this.separator3, c);
 
 		//Graph Generation
-		//edges
+		//nodes
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridwidth = 1;
 		c.gridx = 0;
 		c.gridy = 11;
-		this.settingsPanel.add(new JLabel("    Number of edges : "), c);
+		this.settingsPanel.add(new JLabel("    Number of nodes : "), c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
 		c.gridy = 11;
-		this.settingsPanel.add(this.edgeNumber, c);
+		this.settingsPanel.add(this.nodeNumber, c);
 		
 		//connexity slider
 		c.fill = GridBagConstraints.HORIZONTAL;
