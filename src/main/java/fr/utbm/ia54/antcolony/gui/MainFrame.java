@@ -20,7 +20,7 @@ public class MainFrame extends JFrame{
         JSplitPane splitPane = new JSplitPane();
         splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         frame.getContentPane().add(splitPane, BorderLayout.CENTER);
-        frame.setSize(800, 600);
+        frame.setSize(1000, 800);
         frame.setVisible(true);
         splitPane.setLeftComponent(new SettingsPanel().createSettingsPanel());
         splitPane.setRightComponent(new GraphPanel().createGraphPanel());
