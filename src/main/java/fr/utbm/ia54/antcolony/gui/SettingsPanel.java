@@ -1,12 +1,19 @@
 package fr.utbm.ia54.antcolony.gui;
 
+import fr.utbm.ia54.antcolony.gui.RandomGraph;
+
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class SettingsPanel implements ActionListener {
+public class SettingsPanel {
 	
 	private JLabel separator1 = new JLabel();
 	private JLabel separator2 = new JLabel();
@@ -31,17 +38,19 @@ public class SettingsPanel implements ActionListener {
 	private JTextField connexityValue = new JTextField();
 	private JTextField pheromonesValue = new JTextField();
 	private JTextField nodeNumber = new JTextField();
-	private JSlider antSlider ;
-	private JSlider pheromonesSlider;
-	private JSlider connexitySlider;
+	private JSlider antSlider = new JSlider() ;
+	private JSlider pheromonesSlider = new JSlider();
+	private JSlider connexitySlider = new JSlider();
 	private JButton playButton = new JButton(); 
 	private JButton pauseButton = new JButton();
 	private JButton stopButton = new JButton();
 	private JButton generateButton = new JButton();
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel=new JPanel();
+
 	private BufferedImage image;
 	private BufferedImage buttonIcon;
+	
 	
 	
 	public JPanel createSettingsPanel() {
@@ -76,7 +85,6 @@ public class SettingsPanel implements ActionListener {
 			this.buttonIcon = ImageIO.read(new File("src/img/play.png"));
 			this.playButton = new JButton(new ImageIcon(this.buttonIcon));
 			this.playButton.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-			this.playButton.addActionListener(this);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -86,7 +94,6 @@ public class SettingsPanel implements ActionListener {
 			this.buttonIcon = ImageIO.read(new File("src/img/pause.png"));
 			this.pauseButton = new JButton(new ImageIcon(this.buttonIcon));
 			this.pauseButton.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-			this.pauseButton.addActionListener(this);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -96,7 +103,6 @@ public class SettingsPanel implements ActionListener {
 			this.buttonIcon = ImageIO.read(new File("src/img/stop.png"));
 			this.stopButton = new JButton(new ImageIcon(this.buttonIcon));
 			this.stopButton.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-			this.stopButton.addActionListener(this);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -166,7 +172,26 @@ public class SettingsPanel implements ActionListener {
 		//Generate Button
 		this.generateButton = new JButton("Generate random graph");
 		this.generateButton.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-		this.generateButton.addActionListener(this);
+		this.generateButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  //Generate the graph with the properties given
+		    new RandomGraph().generateGraph(Integer.parseInt(nodeNumber.getText()),(float)Integer.parseInt(connexityValue.getText()));
+		    Robot robot = null;
+			try {
+				robot = new Robot();
+			} catch (AWTException e1) {
+				e1.printStackTrace();
+			}
+			//simulate click on panel to trigger event to refresh the graph panel
+			Point mousePos = MouseInfo.getPointerInfo().getLocation();
+			robot.mouseMove(50,50);
+		    robot.mousePress(InputEvent.BUTTON1_MASK);
+		    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		    robot.mouseMove((int)mousePos.getX(), (int)mousePos.getY());
+		  }
+		});
 		
 		// packing the panel
 		this.settingsPanel.setLayout(new GridBagLayout());
@@ -287,9 +312,5 @@ public class SettingsPanel implements ActionListener {
 
 		
 		return this.settingsPanel;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
 	}
 }
