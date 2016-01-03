@@ -30,7 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class SettingsPanel {
-	
+
 	private JLabel separator1 = new JLabel();
 	private JLabel separator2 = new JLabel();
 	private JLabel separator3 = new JLabel();
@@ -38,20 +38,20 @@ public class SettingsPanel {
 	private JTextField connexityValue = new JTextField();
 	private JTextField pheromonesValue = new JTextField();
 	private JTextField nodeNumber = new JTextField();
-	private JSlider antSlider = new JSlider() ;
+	private JSlider antSlider = new JSlider();
 	private JSlider pheromonesSlider = new JSlider();
 	private JSlider connexitySlider = new JSlider();
-	private JButton playButton = new JButton(); 
+	private JButton playButton = new JButton();
 	private JButton pauseButton = new JButton();
 	private JButton stopButton = new JButton();
 	private JButton generateButton = new JButton();
 	private JPanel settingsPanel = new JPanel();
-	private JPanel buttonPanel=new JPanel();
+	private JPanel buttonPanel = new JPanel();
 
 	private BufferedImage image;
 	private BufferedImage buttonIcon;
-	
-	
+
+	GridBagConstraints c = new GridBagConstraints();
 	
 	public JPanel createSettingsPanel() {
 
@@ -80,7 +80,7 @@ public class SettingsPanel {
 		}
 
 		// Creating play/pause/stop buttons
-		//play button
+		// play button
 		try {
 			this.buttonIcon = ImageIO.read(new File("src/img/play.png"));
 			this.playButton = new JButton(new ImageIcon(this.buttonIcon));
@@ -144,13 +144,13 @@ public class SettingsPanel {
 			}
 		};
 		this.pheromonesSlider.addChangeListener(pheromonesListener);
-		
-		//Graph gneration settings
-		//Node Number text field
+
+		// Graph gneration settings
+		// Node Number text field
 		this.nodeNumber.setText("10");
 		this.nodeNumber.setPreferredSize(new Dimension(100, 15));
-		
-		//Connexity slider
+
+		// Connexity slider
 		this.connexitySlider = new JSlider(0, 100);
 		this.connexityValue.setText(String.valueOf(this.connexitySlider.getValue()));
 		this.connexityValue.setPreferredSize(new Dimension(100, 15));
@@ -168,39 +168,55 @@ public class SettingsPanel {
 			}
 		};
 		this.connexitySlider.addChangeListener(connexityListener);
-		
-		//Generate Button
+
+		//Define a warning label
+		JLabel warn = new JLabel("Connexity too low");
+		warn.setVisible(false);
+		// Generate Button
 		this.generateButton = new JButton("Generate random graph");
 		this.generateButton.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-		this.generateButton.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  //Generate the graph with the properties given
-		    new RandomGraph().generateGraph(Integer.parseInt(nodeNumber.getText()),(float)Integer.parseInt(connexityValue.getText()));
-		    Robot robot = null;
-			try {
-				robot = new Robot();
-			} catch (AWTException e1) {
-				e1.printStackTrace();
+		this.generateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int nodes=Integer.parseInt(nodeNumber.getText());
+				int connexity=(int) Integer.parseInt(connexityValue.getText());
+				float maxEdges = connexity * nodes * (nodes - 1) / 200;
+				//Test if the connexity is high enough to connect all nodes else warning
+				if (maxEdges > Integer.parseInt(nodeNumber.getText())) {
+					// Generate the graph with the properties given
+					new RandomGraph().generateGraph(nodes,
+							(float) connexity);
+					Robot robot = null;
+					try {
+						robot = new Robot();
+					} catch (AWTException e1) {
+						e1.printStackTrace();
+					}
+					// simulate click on panel to trigger event to refresh the graph panel
+					Point mousePos = MouseInfo.getPointerInfo().getLocation();
+					robot.mouseMove(50, 50);
+					robot.mousePress(InputEvent.BUTTON1_MASK);
+					robot.mouseRelease(InputEvent.BUTTON1_MASK);
+					robot.mouseMove((int) mousePos.getX(), (int) mousePos.getY());
+					warn.setVisible(false);
+					connexityValue.setBorder(nodeNumber.getBorder());
+					
+					
+				}
+				else{
+					warn.setVisible(true);
+					connexityValue.setBorder(BorderFactory.createLineBorder(Color.red));
+				}
 			}
-			//simulate click on panel to trigger event to refresh the graph panel
-			Point mousePos = MouseInfo.getPointerInfo().getLocation();
-			robot.mouseMove(50,50);
-		    robot.mousePress(InputEvent.BUTTON1_MASK);
-		    robot.mouseRelease(InputEvent.BUTTON1_MASK);
-		    robot.mouseMove((int)mousePos.getX(), (int)mousePos.getY());
-		  }
 		});
-		
+
 		// packing the panel
 		this.settingsPanel.setLayout(new GridBagLayout());
 		this.buttonPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridwidth=1;
+		c.gridwidth = 1;
 		c.ipady = 20;
 		c.ipadx = 10;
-		c.insets = new Insets(0,15,0,15);
+		c.insets = new Insets(0, 15, 0, 15);
 		// play button
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -217,13 +233,13 @@ public class SettingsPanel {
 		c.gridy = 0;
 		this.buttonPanel.add(this.stopButton, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth=3;
+		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.settingsPanel.add(this.buttonPanel, c);
-		
+
 		// adding the separator
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridwidth = 3;
 		c.gridx = 0;
@@ -276,8 +292,8 @@ public class SettingsPanel {
 		c.gridy = 9;
 		this.settingsPanel.add(this.separator3, c);
 
-		//Graph Generation
-		//nodes
+		// Graph Generation
+		// nodes
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridwidth = 1;
 		c.gridx = 0;
@@ -287,8 +303,8 @@ public class SettingsPanel {
 		c.gridx = 2;
 		c.gridy = 11;
 		this.settingsPanel.add(this.nodeNumber, c);
-		
-		//connexity slider
+
+		// connexity slider
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 12;
@@ -302,15 +318,19 @@ public class SettingsPanel {
 		c.gridx = 0;
 		c.gridy = 14;
 		this.settingsPanel.add(this.connexitySlider, c);
-		
-		//generate button
+
+		// generate button
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth=3;
+		c.gridwidth = 3;
 		c.gridx = 0;
 		c.gridy = 15;
 		this.settingsPanel.add(this.generateButton, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 16;
+		this.settingsPanel.add(warn, c);
 
-		
 		return this.settingsPanel;
 	}
 }

@@ -1,6 +1,7 @@
 package fr.utbm.ia54.antcolony.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
@@ -35,11 +36,15 @@ public class MainFrame extends JFrame {
 			}
 
 			public void mouseReleased(MouseEvent e) {
-				((JPanel) splitPane.getRightComponent()).removeAll();
-				View gp = new XMLToGraph().graphRender();
-				((JPanel) splitPane.getRightComponent()).add(gp, BorderLayout.CENTER);
-				((JPanel) splitPane.getRightComponent()).repaint();
-				((JPanel) splitPane.getRightComponent()).revalidate();
+				Point p = e.getLocationOnScreen();
+				// If we click on (50,50) it es the graphrefresh
+				if (p.getX() == 50 && p.getY() == 50) {
+					((JPanel) splitPane.getRightComponent()).removeAll();
+					View gp = new XMLToGraph().graphRender();
+					((JPanel) splitPane.getRightComponent()).add(gp, BorderLayout.CENTER);
+					((JPanel) splitPane.getRightComponent()).repaint();
+					((JPanel) splitPane.getRightComponent()).revalidate();
+				}
 
 			}
 
