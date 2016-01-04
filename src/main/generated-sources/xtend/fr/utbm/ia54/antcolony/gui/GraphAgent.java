@@ -1,10 +1,12 @@
 package fr.utbm.ia54.antcolony.gui;
 
-import fr.utbm.ia54.antcolony.gui.GraphColorizerAgent;
 import fr.utbm.ia54.antcolony.gui.MainFrame;
 import fr.utbm.ia54.antcolony.message.AntNumberChange;
 import fr.utbm.ia54.antcolony.message.GraphChange;
+import fr.utbm.ia54.antcolony.message.Pause;
 import fr.utbm.ia54.antcolony.message.PheromoneRateChange;
+import fr.utbm.ia54.antcolony.message.Play;
+import fr.utbm.ia54.antcolony.message.Stop;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.Behaviors;
 import io.sarl.core.DefaultContextInteractions;
@@ -28,6 +30,7 @@ import io.sarl.util.OpenEventSpace;
 import io.sarl.util.OpenEventSpaceSpecification;
 import java.awt.Component;
 import java.util.UUID;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
@@ -59,6 +62,12 @@ public class GraphAgent extends Agent {
   
   protected MainFrame mf;
   
+  protected JButton play;
+  
+  protected JButton pause;
+  
+  protected JButton stop;
+  
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
     AgentContext _defaultContext = this.getDefaultContext();
@@ -72,38 +81,58 @@ public class GraphAgent extends Agent {
     this.mf = _mainFrame;
     JSplitPane _createMainFrame = this.mf.createMainFrame();
     this.splitPane = _createMainFrame;
-    this.spawn(GraphColorizerAgent.class);
     Component _rightComponent = this.splitPane.getRightComponent();
     this.graphPanel = ((JPanel) _rightComponent);
     Component _leftComponent = this.splitPane.getLeftComponent();
     this.settingsPanel = ((JPanel) _leftComponent);
     Component _component = this.settingsPanel.getComponent(0);
     this.playPanel = ((JPanel) _component);
-    Component _component_1 = this.settingsPanel.getComponent(4);
-    this.antSlider = ((JSlider) _component_1);
+    Component _component_1 = this.playPanel.getComponent(0);
+    this.play = ((JButton) _component_1);
+    Component _component_2 = this.playPanel.getComponent(1);
+    this.pause = ((JButton) _component_2);
+    Component _component_3 = this.playPanel.getComponent(2);
+    this.stop = ((JButton) _component_3);
+    Component _component_4 = this.settingsPanel.getComponent(4);
+    this.antSlider = ((JSlider) _component_4);
     int _value = this.antSlider.getValue();
     this.antNumber = _value;
     this.println(Integer.valueOf(this.antNumber));
-    Component _component_2 = this.settingsPanel.getComponent(8);
-    this.pheromoneSlider = ((JSlider) _component_2);
+    Component _component_5 = this.settingsPanel.getComponent(8);
+    this.pheromoneSlider = ((JSlider) _component_5);
     int _value_1 = this.pheromoneSlider.getValue();
     this.pheromoneRate = _value_1;
     this.println(Integer.valueOf(this.pheromoneRate));
     while (true) {
       {
+        boolean _isSelected = this.play.isSelected();
+        if (_isSelected) {
+          Play _play = new Play(true);
+          this.space.emit(_play);
+        }
+        boolean _isSelected_1 = this.pause.isSelected();
+        if (_isSelected_1) {
+          Pause _pause = new Pause(true);
+          this.space.emit(_pause);
+        }
+        boolean _isSelected_2 = this.stop.isSelected();
+        if (_isSelected_2) {
+          Stop _stop = new Stop(true);
+          this.space.emit(_stop);
+        }
+        this.antSlider.revalidate();
         int _value_2 = this.antSlider.getValue();
         this.temp = _value_2;
         if ((this.temp != this.antNumber)) {
           this.antNumber = this.temp;
-          this.println(Integer.valueOf(this.antNumber));
           AntNumberChange _antNumberChange = new AntNumberChange(this.antNumber);
           this.space.emit(_antNumberChange);
         }
+        this.pheromoneSlider.revalidate();
         int _value_3 = this.pheromoneSlider.getValue();
         this.temp = _value_3;
         if ((this.temp != this.pheromoneRate)) {
           this.pheromoneRate = this.temp;
-          this.println(Integer.valueOf(this.pheromoneRate));
           PheromoneRateChange _pheromoneRateChange = new PheromoneRateChange(this.pheromoneRate);
           this.space.emit(_pheromoneRateChange);
         }

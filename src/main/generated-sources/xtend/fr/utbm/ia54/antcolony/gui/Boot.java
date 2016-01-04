@@ -1,6 +1,7 @@
 package fr.utbm.ia54.antcolony.gui;
 
 import fr.utbm.ia54.antcolony.gui.GraphAgent;
+import fr.utbm.ia54.antcolony.gui.GraphColorizerAgent;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.DefaultContextInteractions;
@@ -31,6 +32,7 @@ public class Boot extends Agent {
   public void _handle_Initialize_0(final Initialize occurrence) {
     UUID spaceId = UUID.randomUUID();
     this.spawn(GraphAgent.class, spaceId);
+    this.spawn(GraphColorizerAgent.class, spaceId);
     this.killMe();
   }
   

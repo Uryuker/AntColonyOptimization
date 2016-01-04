@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.message
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+event Stop{
+	var stop : boolean
+	new(st:boolean){
+		stop=st
+	}
+}

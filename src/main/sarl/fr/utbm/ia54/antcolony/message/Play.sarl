@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.message
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+event Play{
+	var play : boolean
+	new(pl:boolean){
+		play=pl
+	}
+}

@@ -19,6 +19,7 @@ agent Boot {
 		var spaceId = UUID::randomUUID
 		//GraphAgent spawner
 		spawn(GraphAgent, spaceId)
+		spawn(GraphColorizerAgent, spaceId)
 		killMe
 	}
 }
