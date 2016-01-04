@@ -1,0 +1,17 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.message
+
+import org.graphstream.graph.Graph
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+event NewGraph{
+	var graph : Graph
+	new(g:Graph){
+		graph=g
+	}
+}

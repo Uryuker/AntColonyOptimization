@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -117,6 +118,72 @@ public class XMLToGraph {
 		}
 		colorizeEdge(graph);
 		return view;
+	}
+
+	public Graph getGraph(){
+		Graph graph = new DefaultGraph("Render");
+		// Definition of the style of the graph
+		graph.addAttribute("ui.quality");
+		graph.addAttribute("ui.antialias");
+		// Set color white for the edges and orange for the nodes
+		graph.addAttribute("ui.stylesheet",
+				"edge { fill-mode: dyn-plain; fill-color: white; } node { fill-color : orange;}");
+
+		try {
+			// Open the XML file
+			File fXmlFile = new File("src/graph.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			EntityResolver resolver = new EntityResolver () {
+				public InputSource resolveEntity (String publicId, String systemId) {
+				String empty = "";
+				ByteArrayInputStream bais = new ByteArrayInputStream(empty.getBytes());
+				return new InputSource(bais);
+				}
+				};
+				dBuilder.setEntityResolver(resolver); 
+			Document doc = dBuilder.parse(fXmlFile);
+			doc.getDocumentElement().normalize();
+
+			// Get the list of nodes and add them to the GraphStream graph
+			NodeList nList = doc.getElementsByTagName("Node");
+			if(nList!=null){
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+	
+					Node nNode = nList.item(temp);
+	
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	
+						Element eElement = (Element) nNode;
+						graph.addNode(eElement.getElementsByTagName("Id").item(0).getTextContent());
+					}
+				}
+			}
+
+			// Get the edges and add them to the GraphStream graph
+			NodeList eList = doc.getElementsByTagName("Edge");
+			for (int temp = 0; temp < eList.getLength(); temp++) {
+				Node nNode = eList.item(temp);
+
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					// adding the edge
+					graph.addEdge(eElement.getElementsByTagName("Id").item(0).getTextContent(),
+							eElement.getElementsByTagName("IdStart").item(0).getTextContent(),
+							eElement.getElementsByTagName("IdEnd").item(0).getTextContent());
+					graph.getEdge(eElement.getElementsByTagName("Id").item(0).getTextContent()).addAttribute("length",
+							eElement.getElementsByTagName("Length").item(0).getTextContent());
+					graph.getEdge(eElement.getElementsByTagName("Id").item(0).getTextContent()).addAttribute(
+							"pheromones", eElement.getElementsByTagName("Pheromone").item(0).getTextContent());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		colorizeEdge(graph);
+		
+		return graph;
+		
 	}
 
 	public void GraphToXML(Graph graph) {

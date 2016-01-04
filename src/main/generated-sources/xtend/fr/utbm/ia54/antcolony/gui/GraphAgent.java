@@ -1,8 +1,10 @@
 package fr.utbm.ia54.antcolony.gui;
 
 import fr.utbm.ia54.antcolony.gui.MainFrame;
+import fr.utbm.ia54.antcolony.gui.XMLToGraph;
 import fr.utbm.ia54.antcolony.message.AntNumberChange;
 import fr.utbm.ia54.antcolony.message.GraphChange;
+import fr.utbm.ia54.antcolony.message.NewGraph;
 import fr.utbm.ia54.antcolony.message.Pause;
 import fr.utbm.ia54.antcolony.message.PheromoneRateChange;
 import fr.utbm.ia54.antcolony.message.Play;
@@ -29,11 +31,14 @@ import io.sarl.lang.core.SpaceID;
 import io.sarl.util.OpenEventSpace;
 import io.sarl.util.OpenEventSpaceSpecification;
 import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.util.UUID;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
+import org.graphstream.graph.Graph;
 
 /**
  * @author quentin barthelemy
@@ -56,6 +61,8 @@ public class GraphAgent extends Agent {
   
   protected JPanel playPanel;
   
+  protected JButton generateButton;
+  
   protected int temp;
   
   protected OpenEventSpace space;
@@ -67,6 +74,16 @@ public class GraphAgent extends Agent {
   protected JButton pause;
   
   protected JButton stop;
+  
+  protected boolean tempPlay;
+  
+  protected boolean tempPause;
+  
+  protected boolean tempStop;
+  
+  protected boolean newGraph;
+  
+  protected ActionListener[] al;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
@@ -89,36 +106,81 @@ public class GraphAgent extends Agent {
     this.playPanel = ((JPanel) _component);
     Component _component_1 = this.playPanel.getComponent(0);
     this.play = ((JButton) _component_1);
-    Component _component_2 = this.playPanel.getComponent(1);
-    this.pause = ((JButton) _component_2);
-    Component _component_3 = this.playPanel.getComponent(2);
-    this.stop = ((JButton) _component_3);
-    Component _component_4 = this.settingsPanel.getComponent(4);
-    this.antSlider = ((JSlider) _component_4);
+    Component _component_2 = this.settingsPanel.getComponent(15);
+    this.generateButton = ((JButton) _component_2);
+    Component _component_3 = this.playPanel.getComponent(1);
+    this.pause = ((JButton) _component_3);
+    Component _component_4 = this.playPanel.getComponent(2);
+    this.stop = ((JButton) _component_4);
+    Component _component_5 = this.settingsPanel.getComponent(4);
+    this.antSlider = ((JSlider) _component_5);
     int _value = this.antSlider.getValue();
     this.antNumber = _value;
     this.println(Integer.valueOf(this.antNumber));
-    Component _component_5 = this.settingsPanel.getComponent(8);
-    this.pheromoneSlider = ((JSlider) _component_5);
+    Component _component_6 = this.settingsPanel.getComponent(8);
+    this.pheromoneSlider = ((JSlider) _component_6);
     int _value_1 = this.pheromoneSlider.getValue();
     this.pheromoneRate = _value_1;
     this.println(Integer.valueOf(this.pheromoneRate));
+    this.tempPlay = false;
+    this.tempPause = false;
+    this.tempStop = false;
+    this.newGraph = false;
     while (true) {
       {
-        boolean _isSelected = this.play.isSelected();
-        if (_isSelected) {
-          Play _play = new Play(true);
-          this.space.emit(_play);
+        ButtonModel _model = this.generateButton.getModel();
+        boolean _isPressed = _model.isPressed();
+        boolean _notEquals = (_isPressed != this.newGraph);
+        if (_notEquals) {
+          this.newGraph = (!this.newGraph);
+          ButtonModel _model_1 = this.generateButton.getModel();
+          boolean _isPressed_1 = _model_1.isPressed();
+          boolean _not = (!_isPressed_1);
+          if (_not) {
+            XMLToGraph _xMLToGraph = new XMLToGraph();
+            Graph _graph = _xMLToGraph.getGraph();
+            NewGraph _newGraph = new NewGraph(_graph);
+            this.space.emit(_newGraph);
+          }
         }
-        boolean _isSelected_1 = this.pause.isSelected();
-        if (_isSelected_1) {
-          Pause _pause = new Pause(true);
-          this.space.emit(_pause);
+        ButtonModel _model_2 = this.play.getModel();
+        boolean _isPressed_2 = _model_2.isPressed();
+        boolean _notEquals_1 = (_isPressed_2 != this.tempPlay);
+        if (_notEquals_1) {
+          this.tempPlay = (!this.tempPlay);
+          ButtonModel _model_3 = this.play.getModel();
+          boolean _isPressed_3 = _model_3.isPressed();
+          boolean _not_1 = (!_isPressed_3);
+          if (_not_1) {
+            Play _play = new Play(true);
+            this.space.emit(_play);
+          }
         }
-        boolean _isSelected_2 = this.stop.isSelected();
-        if (_isSelected_2) {
-          Stop _stop = new Stop(true);
-          this.space.emit(_stop);
+        ButtonModel _model_4 = this.pause.getModel();
+        boolean _isPressed_4 = _model_4.isPressed();
+        boolean _notEquals_2 = (_isPressed_4 != this.tempPause);
+        if (_notEquals_2) {
+          this.tempPause = (!this.tempPause);
+          ButtonModel _model_5 = this.pause.getModel();
+          boolean _isPressed_5 = _model_5.isPressed();
+          boolean _not_2 = (!_isPressed_5);
+          if (_not_2) {
+            Pause _pause = new Pause(true);
+            this.space.emit(_pause);
+          }
+        }
+        ButtonModel _model_6 = this.stop.getModel();
+        boolean _isPressed_6 = _model_6.isPressed();
+        boolean _notEquals_3 = (_isPressed_6 != this.tempStop);
+        if (_notEquals_3) {
+          this.tempStop = (!this.tempStop);
+          ButtonModel _model_7 = this.stop.getModel();
+          boolean _isPressed_7 = _model_7.isPressed();
+          boolean _not_3 = (!_isPressed_7);
+          if (_not_3) {
+            Stop _stop = new Stop(true);
+            this.space.emit(_stop);
+          }
         }
         this.antSlider.revalidate();
         int _value_2 = this.antSlider.getValue();

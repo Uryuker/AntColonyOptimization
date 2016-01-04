@@ -3,26 +3,25 @@
  */
 package fr.utbm.ia54.antcolony.gui
 
-import io.sarl.core.Initialize
-import fr.utbm.ia54.antcolony.gui.MainFrame
-import io.sarl.util.OpenEventSpace
-import io.sarl.util.OpenEventSpaceSpecification
-import io.sarl.core.DefaultContextInteractions
-import io.sarl.core.Behaviors
-import io.sarl.core.Logging
-import java.util.UUID
-import javax.swing.JSplitPane ;
-import javax.swing.JPanel
-import javax.swing.JSlider
+import fr.utbm.ia54.antcolony.message.AntNumberChange
 import fr.utbm.ia54.antcolony.message.GraphChange
 import fr.utbm.ia54.antcolony.message.PheromoneRateChange
-import fr.utbm.ia54.antcolony.message.AntNumberChange
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.util.OpenEventSpace
+import io.sarl.util.OpenEventSpaceSpecification
+import java.util.UUID
+import javax.swing.JButton
+import javax.swing.JPanel
+import javax.swing.JSlider
+import javax.swing.JSplitPane
 import fr.utbm.ia54.antcolony.message.Play
 import fr.utbm.ia54.antcolony.message.Pause
 import fr.utbm.ia54.antcolony.message.Stop
-
-
-import javax.swing.JButton
+import java.awt.^event.ActionListener
+import fr.utbm.ia54.antcolony.message.NewGraph
 
 /**
  * @author quentin barthelemy
@@ -38,12 +37,18 @@ agent GraphAgent {
 	var antNumber : int
 	var pheromoneSlider : JSlider
 	var playPanel : JPanel
+	var generateButton : JButton
 	var temp : int
 	var space : OpenEventSpace
 	var mf : MainFrame
 	var play : JButton
 	var pause : JButton
 	var stop : JButton
+	var tempPlay : boolean
+	var tempPause : boolean
+	var tempStop : boolean
+	var newGraph : boolean
+	var al : ActionListener []
 
 	on Initialize {
 	//Get the space to send infos
@@ -57,9 +62,8 @@ agent GraphAgent {
 		graphPanel = splitPane.getRightComponent as JPanel
 		settingsPanel = splitPane.getLeftComponent as JPanel
 		playPanel = settingsPanel.getComponent(0) as JPanel
-
 		play = playPanel.getComponent(0) as JButton
-
+		generateButton = settingsPanel.getComponent(15) as JButton
 		pause = playPanel.getComponent(1) as JButton
 		stop = playPanel.getComponent(2) as JButton
 		//Get the number of ant
@@ -72,17 +76,47 @@ agent GraphAgent {
 		pheromoneRate = pheromoneSlider.value
 		println(pheromoneRate)
 
+		tempPlay = false
+		tempPause = false
+		tempStop = false
+		newGraph = false
+		
+
 		while(true)
 			{
 			//Detect pressure on Button
-				if(play.selected) {
-					space.emit(new Play(true))
+			//send the event only at the end of the click
+				if(generateButton.getModel.isPressed != newGraph) {
+					newGraph = !newGraph
+					if(!generateButton.getModel.isPressed) {
+						//Send event new gaph to say to the environnement that the graph has changed
+						space.emit(new NewGraph(new XMLToGraph().getGraph))
+					}
+						
+				
 				}
-				if(pause.selected) {
-					space.emit(new Pause(true))
+				if(play.getModel.isPressed != tempPlay) {
+					tempPlay = !tempPlay
+					if(!play.getModel.isPressed) {
+						//send play to the environnement
+						space.emit(new Play(true))
+					}
 				}
-				if(stop.selected) {
-					space.emit(new Stop(true))
+				//send the event only at the end of the click
+				if(pause.getModel.isPressed != tempPause) {
+					tempPause = !tempPause
+					if(!pause.getModel.isPressed) {
+						//send pause at the environnement
+						space.emit(new Pause(true))
+					}
+				}
+				//send the event only at the end of the click
+				if(stop.getModel.isPressed != tempStop) {
+					tempStop = !tempStop
+					if(!stop.getModel.isPressed) {
+						//Send stop to the environnement
+						space.emit(new Stop(true))
+					}
 				}
 				//Detection of changes on the ant number or the pheromone rate
 				antSlider.revalidate
@@ -110,4 +144,5 @@ agent GraphAgent {
 			graphPanel.revalidate();
 		}
 	}
+	
 	
