@@ -17,7 +17,7 @@ capacity Capacities {
 
 skill DefaultCapacitySkill implements Capacities {
 	
-	def colorGraph(graph : Graph) : Graph {
+	override colorGraph(graph : Graph) : Graph {
 		var xml : XMLToGraph
 		return xml.colorizeEdge(graph)
 		
