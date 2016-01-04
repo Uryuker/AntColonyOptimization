@@ -9,12 +9,21 @@ import io.sarl.core.Initialize
 import io.sarl.util.OpenEventSpace
 import io.sarl.util.OpenEventSpaceSpecification
 import java.util.UUID
+import fr.utbm.ia54.antcolony.message.Play
+import fr.utbm.ia54.antcolony.message.Pause
+import fr.utbm.ia54.antcolony.message.Stop
+
+import io.sarl.core.Lifecycle
+import fr.utbm.ia54.antcolony.graphe.Node
+import fr.utbm.ia54.antcolony.graphe.Edge
 
 agent Ant {
 	
-	uses DefaultContextInteractions, Behaviors,Capicities
+	uses DefaultContextInteractions, Behaviors, Lifecycle, AntCapicities
 	
 	var space : OpenEventSpace
+	var actualNode : Node
+	var previousNode : Node
 	
 	on Initialize {
 		space = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification),
@@ -23,6 +32,30 @@ agent Ant {
 		space.register(asEventListener())
 	}
 	
+	on move{
+		var nod : Node
+		var edg : Edge
+		edg = searchNextEdge(actualNode)
+		nod = edg.getOppositeNode(actualNode)
+		move(nod,edg)
+		previousNode = actualNode
+		actualNode = nod
+	}
 	
+	on Play{
+		
+	}
+	
+	on Pause{
+		
+	}
+	
+	on Stop{
+		killMe
+	}
+	
+	def killMe() {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
 	
 }

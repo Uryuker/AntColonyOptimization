@@ -7,75 +7,74 @@ package fr.utbm.ia54.antcolony.organization
 import fr.utbm.ia54.antcolony.graphe.Node;
 import fr.utbm.ia54.antcolony.graphe.Edge;
 import fr.utbm.ia54.antcolony.graphe.Graph;
+import java.util.ArrayList
+import io.sarl.util.OpenEventSpace
+import java.util.Set
 
-capacity Capicities {
+capacity AntCapicities {
 	
-	def move(n : Node)
-	def searchNextEdge()
+	def move(n : Node, e : Edge)
+	def searchNextEdge(n : Node) : Edge
 	
 }
 
 capacity EnvCapacities{
 	
-	def updatePheromon(graph : Graph) : Graph
-	def updateGraph(graph : Graph) : Graph
+	def updateGraph(graph : Graph, spaceIn : OpenEventSpace, tauxevap : int) : Graph
 	
 }
 
 skill EnvSkill implements EnvCapacities{
 	
-	def updatePheromon(graph : Graph) : Graph{
-		
-		for(Edge e : graph.getEdges()){
-			double ph = (e.getPheromon * tauxEvap )+ (e.AntCount() * 0.1) 
-			e.setPheromon(ph)
-		} 
-		return graph
-	}
-	
-	def updateGraph(graph : Graph) : Graph {
-		
-		for(a : graph.ListAnt){}
-			Node n = a.searchNextEdge()
-			a.move(n)
-		}
-		return graph
-	}
-		
-}
-
-
-skill Skill implements Capicities{
-	
-	var previousNode : new Node()
-	
-	var actualNode : new Node()
-	
-	
-	
-	override move(e:Edge, n: Node){
-		e.setnbAnt = e.getnbAnt +1;
-		previousNode = actualNode
-		actualNode = n
-		
-	}
-	
-	override searchNextEdge() : Node {
-		//algo recherche prochain edge
-		var listEdge = actualNode.getNeighbors()
-		var nextEdge : new Edge()
-		var p : float
-		
-		for(e : listEdge)) {
+	def updateGraph(graph : Graph, spaceIn : OpenEventSpace, tauxevap :int) : Graph {
 			
-			float max
+			var listEdges : Set<Edge>
+			var i : int
+			var ph : double
+			listEdges = graph.getEdges()
+			for(i=0;i<listEdges.size();i++){
+				ph = listEdges.get(i).getPheromon * tauxevap
+				ph = ph + listEdges.get(i).getNbAnt * 0.1
+				listEdges.get(i).setPheromon(ph)
+			}
+			
+			//spaceIn.emit(move)
+		
+	
+		return graph
+	}
+}
+		
+
+
+
+skill Skill implements AntCapicities{
+	
+		def move(n : Node, e : Edge){
+		
+		e.setNbAnt(e.getNbAnt +1);
+		}
+		
+		def searchNextEdge(n : Node) : Edge{
+		//algo recherche prochain edge
+		var listEdge : ArrayList<Edge>
+		var nextEdge : Edge
+		var p : double
+		var i : int
+		listEdge = n.getNeighbors()
+		for(i=0;i<listEdge.size();i++) {
+			var max : double 
 			max = p
-			p = (e.getPheromon * 1/e.getweight() / (graph.totalPheromon * 1/graph.totalDistance)
-			if max < p{
+			p = listEdge.get(i).getPheromon
+			p = p * 1/listEdge.get(i).getWeight()
+			//p = p / graph.totalPheromon 
+			//p = p * 1/graph.totalDistance
+			
+			if (max < p){
 				max = p
-				nextEdge = e
+				nextEdge = listEdge.get(i)
 			}
 		}
-		return nextEdge.getOppositeNode(actualNode)
+		return nextEdge
 		}
 }

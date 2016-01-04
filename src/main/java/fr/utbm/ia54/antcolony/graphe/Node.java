@@ -136,6 +136,11 @@ public class Node {
     }
 
 
+	Node() {
+	  throw new UnsupportedOperationException("TODO: auto-generated method stub");
+	}
+
+
     
 }
 

@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.organization
+
+
+import fr.utbm.ia54.antcolony.graphe.Node;
+/**
+ * @author Thomas
+ *
+ */
+event move{
+	
+}

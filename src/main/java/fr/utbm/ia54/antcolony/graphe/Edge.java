@@ -1,4 +1,6 @@
 package fr.utbm.ia54.antcolony.graphe;
+
+import fr.utbm.ia54.antcolony.graphe.Node;
 /**
  * This class models an undirected Edge in the Graph implementation.
  * An Edge contains two vertices and a weight. If no weight is
@@ -20,13 +22,14 @@ public class Edge implements Comparable<Edge> {
 
     private Node one, two;
     private int weight;
-    private float pheromon;
+    private double pheromon;
+    private int nbAnt;
     
-    public float getPheromon() {
+    public double getPheromon() {
 		return pheromon;
 	}
 
-	public void setPheromon(float pheromon) {
+	public void setPheromon(double pheromon) {
 		this.pheromon = pheromon;
 	}
 
@@ -143,6 +146,22 @@ public class Edge implements Comparable<Edge> {
         Edge e = (Edge)other;
         
         return e.one.equals(this.one) && e.two.equals(this.two);
-    }   
+    }
+
+	public Node getOppositeNode(Node n1) {
+	  if(n1.equals(one)){
+		  return two;
+	  }
+	  else
+		  return one;
+	}
+
+	public int getNbAnt() {
+		return nbAnt;
+	}
+
+	public void setNbAnt(int nbAnt) {
+		this.nbAnt = nbAnt;
+	}   
 }
 
