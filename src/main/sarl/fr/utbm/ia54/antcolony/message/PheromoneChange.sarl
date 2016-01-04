@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.message
+
+import org.graphstream.graph.Graph
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+event PheromoneChange{
+	var graph : Graph
+	
+	new(newGraph:Graph){
+		graph = newGraph
+	}
+	
+}

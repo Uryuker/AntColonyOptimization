@@ -1,5 +1,8 @@
 package fr.utbm.ia54.antcolony.gui;
-
+/**
+ * @author quentin barthelemy
+ *
+ */
 import fr.utbm.ia54.antcolony.gui.RandomGraph;
 
 import java.awt.AWTException;

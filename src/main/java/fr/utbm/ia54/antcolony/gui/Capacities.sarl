@@ -1,0 +1,26 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.gui
+
+import org.graphstream.graph.Graph
+import fr.utbm.ia54.antcolony.gui.XMLToGraph
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+capacity Capacities {
+
+	def colorGraph(graph : Graph) : Graph
+}
+
+skill DefaultCapacitySkill implements Capacities {
+	
+	def colorGraph(graph : Graph) : Graph {
+		var xml : XMLToGraph
+		return xml.colorizeEdge(graph)
+		
+	}
+	
+}

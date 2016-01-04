@@ -1,4 +1,8 @@
 package fr.utbm.ia54.antcolony.gui;
+/**
+ * @author quentin barthelemy
+ *
+ */
 
 import java.awt.BorderLayout;
 import java.awt.Point;
@@ -16,7 +20,7 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = -905943631093499446L;
 
-	public void createMainFrame() {
+	public JSplitPane createMainFrame() {
 		// Create the frame
 		JFrame frame = new JFrame("Ant Colony Optimization");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +53,7 @@ public class MainFrame extends JFrame {
 			}
 
 		});
+		return splitPane;
 
 	}
 }

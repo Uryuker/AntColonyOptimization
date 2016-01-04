@@ -1,5 +1,8 @@
 package fr.utbm.ia54.antcolony.gui;
-
+/**
+ * @author quentin barthelemy
+ *
+ */
 import java.util.Random;
 
 import org.graphstream.graph.Edge;
@@ -72,11 +75,11 @@ public class RandomGraph {
 			graph.getEdge(String.valueOf(iedge)).addAttribute("length", rlength);
 			graph.getEdge(String.valueOf(iedge)).addAttribute("pheromones", 0);
 
-			if (iedge == (maxEdges - nodes)) {
+			if (iedge == ((int)maxEdges - (nodes/2))) {
 				// Test to see if all nodes are connected otherwise we connect
 				// it with the next node
 				for (Node n : graph.getEachNode()) {
-					if (n.getEachEnteringEdge() == null && n.getEachLeavingEdge() == null) {
+					if (n.getEachEdge() == null) {
 						// if it's the last node, link it to the first
 						if (Integer.parseInt(n.getId()) == nodes) {
 							graph.addEdge(String.valueOf(iedge), Integer.parseInt(n.getId()), 1);

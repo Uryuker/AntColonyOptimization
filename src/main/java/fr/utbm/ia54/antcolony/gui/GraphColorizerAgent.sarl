@@ -1,0 +1,38 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.gui
+
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.util.OpenEventSpace
+import io.sarl.util.OpenEventSpaceSpecification
+import java.util.UUID
+import fr.utbm.ia54.antcolony.message.GraphChange
+import fr.utbm.ia54.antcolony.message.PheromoneChange
+import org.graphstream.graph.Graph
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+agent GraphColorizerAgent {
+	uses DefaultContextInteractions, Behaviors, Capacities
+	var space : OpenEventSpace
+	var xml = new XMLToGraph
+	var graph : Graph
+
+	on Initialize {
+		space = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification),
+		occurrence.parameters.get(0) as UUID)
+		space.register(asEventListener())
+	}
+
+	//Get the graph sent by the environnement to update colors
+	on PheromoneChange {
+		graph =colorGraph(occurrence.graph)
+		var evt = new GraphChange(graph)
+		space.emit(evt)
+	}
+}

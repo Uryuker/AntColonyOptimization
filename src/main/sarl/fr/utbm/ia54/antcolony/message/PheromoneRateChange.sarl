@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.message
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+event PheromoneRateChange{
+	var pheromoneRate : int
+	new(i:int){
+		pheromoneRate=i
+	}
+}

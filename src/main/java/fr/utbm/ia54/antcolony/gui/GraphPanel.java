@@ -1,4 +1,8 @@
 package fr.utbm.ia54.antcolony.gui;
+/**
+ * @author quentin barthelemy
+ *
+ */
 
 import fr.utbm.ia54.antcolony.gui.XMLToGraph;
 import java.awt.BorderLayout;

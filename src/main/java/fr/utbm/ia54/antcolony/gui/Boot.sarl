@@ -1,0 +1,24 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.gui
+
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import java.util.UUID
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+agent Boot {
+	uses DefaultContextInteractions,Lifecycle
+	
+	on Initialize{
+		var spaceId = UUID::randomUUID
+		//GraphAgent spawner
+		spawn(GraphAgent, spaceId)
+		killMe
+	}
+}

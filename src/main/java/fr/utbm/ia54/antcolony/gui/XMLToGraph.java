@@ -1,5 +1,8 @@
 package fr.utbm.ia54.antcolony.gui;
-
+/**
+ * @author quentin barthelemy
+ *
+ */
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +29,7 @@ import org.xml.sax.InputSource;
 
 public class XMLToGraph {
 
-	public void colorizeEdge(Graph graph) {
+	public Graph colorizeEdge(Graph graph) {
 		int ph = 0;
 		for (Edge e : graph.getEachEdge()) {
 			ph = Integer.parseInt(e.getAttribute("pheromones"));
@@ -46,6 +49,7 @@ public class XMLToGraph {
 			// graph.getEdge(eElement.getElementsByTagName("Id").item(0).getTextContent()).addAttribute("ui.style",
 			// "fill-color: rgb(253,180,180);");
 		}
+		return graph;
 	}
 
 	public View graphRender() {

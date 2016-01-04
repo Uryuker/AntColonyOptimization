@@ -1,0 +1,89 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.gui
+
+import io.sarl.core.Initialize
+import fr.utbm.ia54.antcolony.gui.MainFrame
+import io.sarl.util.OpenEventSpace
+import io.sarl.util.OpenEventSpaceSpecification
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Behaviors
+import io.sarl.core.Logging
+import java.util.UUID
+import javax.swing.JSplitPane ;
+import javax.swing.JPanel
+import javax.swing.JSlider
+import fr.utbm.ia54.antcolony.message.GraphChange
+import fr.utbm.ia54.antcolony.message.PheromoneRateChange
+import fr.utbm.ia54.antcolony.message.AntNumberChange
+
+/**
+ * @author quentin barthelemy
+ *
+ */
+agent GraphAgent {
+	uses DefaultContextInteractions, Behaviors, Logging
+	var pheromoneRate : int
+	var splitPane : JSplitPane
+	var settingsPanel : JPanel
+	var graphPanel : JPanel
+	var antSlider : JSlider
+	var antNumber : int
+	var pheromoneSlider : JSlider
+	var playPanel : JPanel
+	var temp : int
+	var space : OpenEventSpace
+	var mf : MainFrame
+
+	on Initialize {
+	//Get the space to send infos
+		space = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification),
+		occurrence.parameters.get(0) as UUID)
+		space.register(asEventListener())
+		//Create the main frame
+		mf = new MainFrame()
+		splitPane = mf.createMainFrame()
+		spawn(GraphColorizerAgent)
+		//Get the settings panel
+		graphPanel = splitPane.getRightComponent as JPanel
+		settingsPanel = splitPane.getLeftComponent as JPanel
+		playPanel = settingsPanel.getComponent(0) as JPanel
+
+		//Get the number of ant
+		antSlider = settingsPanel.getComponent(4) as JSlider
+		antNumber = antSlider.value
+		println(antNumber)
+
+		//Get the pheromone rate
+		pheromoneSlider = settingsPanel.getComponent(8) as JSlider
+		pheromoneRate = pheromoneSlider.value
+		println(pheromoneRate)
+
+		while(true)
+			{
+			//Detection of changes on the ant number or the pheromone rate
+				temp = antSlider.value
+				if(temp != antNumber) {
+					antNumber = temp
+					println(antNumber)
+					space.emit(new AntNumberChange(antNumber))
+
+				}
+				temp = pheromoneSlider.value
+				if(temp != pheromoneRate) {
+					pheromoneRate = temp
+					println(pheromoneRate)
+					space.emit(new PheromoneRateChange(pheromoneRate))
+
+				}
+			}
+
+		}
+
+		on GraphChange {
+			//If we receiv Graph Change, the edges color has been updated so we need to repaint the graph
+			graphPanel.repaint();
+			graphPanel.revalidate();
+		}
+	}
