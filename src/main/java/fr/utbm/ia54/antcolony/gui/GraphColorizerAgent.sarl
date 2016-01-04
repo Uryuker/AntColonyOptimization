@@ -31,7 +31,7 @@ agent GraphColorizerAgent {
 
 	//Get the graph sent by the environnement to update colors
 	on PheromoneChange {
-		graph =colorGraph(new GraphStreamToGraph().Graph2GS(occurrence.graph))
+		graph =colorGraph(occurrence.graph)
 		var evt = new GraphChange(graph)
 		space.emit(evt)
 	}

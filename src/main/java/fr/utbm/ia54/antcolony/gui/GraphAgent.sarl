@@ -81,7 +81,10 @@ agent GraphAgent {
 		tempPause = false
 		tempStop = false
 		newGraph = false
-		
+		//Send the graph on the environnement
+		var gr : Graph
+		gr = new XMLToGraph().getGraph();
+		space.emit(new NewGraph(gr))
 
 		while(true)
 			{
@@ -90,18 +93,16 @@ agent GraphAgent {
 				if(generateButton.getModel.isPressed != newGraph) {
 					newGraph = !newGraph
 					if(!generateButton.getModel.isPressed) {
-						//Send event new gaph to say to the environnement that the graph has changed
-						var gr : Graph
-						gr=new XMLToGraph().getGraph();
+					//Send event new gaph to say to the environnement that the graph has changed
+						gr = new XMLToGraph().getGraph();
 						space.emit(new NewGraph(gr))
 					}
-						
-				
+
 				}
 				if(play.getModel.isPressed != tempPlay) {
 					tempPlay = !tempPlay
 					if(!play.getModel.isPressed) {
-						//send play to the environnement
+					//send play to the environnement
 						space.emit(new Play(true))
 					}
 				}
@@ -109,7 +110,7 @@ agent GraphAgent {
 				if(pause.getModel.isPressed != tempPause) {
 					tempPause = !tempPause
 					if(!pause.getModel.isPressed) {
-						//send pause at the environnement
+					//send pause at the environnement
 						space.emit(new Pause(true))
 					}
 				}
@@ -117,7 +118,7 @@ agent GraphAgent {
 				if(stop.getModel.isPressed != tempStop) {
 					tempStop = !tempStop
 					if(!stop.getModel.isPressed) {
-						//Send stop to the environnement
+					//Send stop to the environnement
 						space.emit(new Stop(true))
 					}
 				}

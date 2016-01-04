@@ -1,7 +1,6 @@
 package fr.utbm.ia54.antcolony.gui;
 
 import fr.utbm.ia54.antcolony.gui.Capacities;
-import fr.utbm.ia54.antcolony.gui.GraphStreamToGraph;
 import fr.utbm.ia54.antcolony.gui.XMLToGraph;
 import fr.utbm.ia54.antcolony.message.GraphChange;
 import fr.utbm.ia54.antcolony.message.PheromoneChange;
@@ -52,9 +51,7 @@ public class GraphColorizerAgent extends Agent {
   
   @Percept
   public void _handle_PheromoneChange_1(final PheromoneChange occurrence) {
-    GraphStreamToGraph _graphStreamToGraph = new GraphStreamToGraph();
-    Graph _Graph2GS = _graphStreamToGraph.Graph2GS(occurrence.graph);
-    Graph _colorGraph = this.colorGraph(_Graph2GS);
+    Graph _colorGraph = this.colorGraph(occurrence.graph);
     this.graph = _colorGraph;
     GraphChange evt = new GraphChange(this.graph);
     this.space.emit(evt);

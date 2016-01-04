@@ -126,6 +126,12 @@ public class GraphAgent extends Agent {
     this.tempPause = false;
     this.tempStop = false;
     this.newGraph = false;
+    Graph gr = null;
+    XMLToGraph _xMLToGraph = new XMLToGraph();
+    Graph _graph = _xMLToGraph.getGraph();
+    gr = _graph;
+    NewGraph _newGraph = new NewGraph(gr);
+    this.space.emit(_newGraph);
     while (true) {
       {
         ButtonModel _model = this.generateButton.getModel();
@@ -137,12 +143,11 @@ public class GraphAgent extends Agent {
           boolean _isPressed_1 = _model_1.isPressed();
           boolean _not = (!_isPressed_1);
           if (_not) {
-            Graph gr = null;
-            XMLToGraph _xMLToGraph = new XMLToGraph();
-            Graph _graph = _xMLToGraph.getGraph();
-            gr = _graph;
-            NewGraph _newGraph = new NewGraph(gr);
-            this.space.emit(_newGraph);
+            XMLToGraph _xMLToGraph_1 = new XMLToGraph();
+            Graph _graph_1 = _xMLToGraph_1.getGraph();
+            gr = _graph_1;
+            NewGraph _newGraph_1 = new NewGraph(gr);
+            this.space.emit(_newGraph_1);
           }
         }
         ButtonModel _model_2 = this.play.getModel();
