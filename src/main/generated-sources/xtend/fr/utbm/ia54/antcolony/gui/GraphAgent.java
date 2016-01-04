@@ -137,9 +137,11 @@ public class GraphAgent extends Agent {
           boolean _isPressed_1 = _model_1.isPressed();
           boolean _not = (!_isPressed_1);
           if (_not) {
+            Graph gr = null;
             XMLToGraph _xMLToGraph = new XMLToGraph();
             Graph _graph = _xMLToGraph.getGraph();
-            NewGraph _newGraph = new NewGraph(_graph);
+            gr = _graph;
+            NewGraph _newGraph = new NewGraph(gr);
             this.space.emit(_newGraph);
           }
         }

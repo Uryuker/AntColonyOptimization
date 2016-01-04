@@ -3,7 +3,7 @@
  */
 package fr.utbm.ia54.antcolony.message
 
-import org.graphstream.graph.Graph
+import fr.utbm.ia54.antcolony.graphe.Graph
 
 /**
  * @author quentin barthelemy

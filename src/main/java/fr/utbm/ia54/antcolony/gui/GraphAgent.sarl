@@ -5,23 +5,24 @@ package fr.utbm.ia54.antcolony.gui
 
 import fr.utbm.ia54.antcolony.message.AntNumberChange
 import fr.utbm.ia54.antcolony.message.GraphChange
+import fr.utbm.ia54.antcolony.message.NewGraph
+import fr.utbm.ia54.antcolony.message.Pause
 import fr.utbm.ia54.antcolony.message.PheromoneRateChange
+import fr.utbm.ia54.antcolony.message.Play
+import fr.utbm.ia54.antcolony.message.Stop
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
 import io.sarl.core.Logging
 import io.sarl.util.OpenEventSpace
 import io.sarl.util.OpenEventSpaceSpecification
+import java.awt.^event.ActionListener
 import java.util.UUID
 import javax.swing.JButton
 import javax.swing.JPanel
 import javax.swing.JSlider
 import javax.swing.JSplitPane
-import fr.utbm.ia54.antcolony.message.Play
-import fr.utbm.ia54.antcolony.message.Pause
-import fr.utbm.ia54.antcolony.message.Stop
-import java.awt.^event.ActionListener
-import fr.utbm.ia54.antcolony.message.NewGraph
+import org.graphstream.graph.Graph
 
 /**
  * @author quentin barthelemy
@@ -90,7 +91,9 @@ agent GraphAgent {
 					newGraph = !newGraph
 					if(!generateButton.getModel.isPressed) {
 						//Send event new gaph to say to the environnement that the graph has changed
-						space.emit(new NewGraph(new XMLToGraph().getGraph))
+						var gr : Graph
+						gr=new XMLToGraph().getGraph();
+						space.emit(new NewGraph(gr))
 					}
 						
 				

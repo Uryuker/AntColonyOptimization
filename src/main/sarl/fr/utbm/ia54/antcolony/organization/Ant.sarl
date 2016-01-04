@@ -3,8 +3,6 @@
  */
 package fr.utbm.ia54.antcolony.organization
 
-import io.sarl.core.Initialize
-import io.sarl.core.Destroy
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize

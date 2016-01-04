@@ -9,7 +9,11 @@ import org.graphstream.graph.Graph
  * @author quentin barthelemy
  *
  */
+ 
+ //
+ 
 event GraphChange{
+	//say that the graph color of edges has been updated
 	var graph : Graph
 	
 	new(newGraph:Graph){

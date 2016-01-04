@@ -3,14 +3,14 @@
  */
 package fr.utbm.ia54.antcolony.gui
 
+import fr.utbm.ia54.antcolony.message.GraphChange
+import fr.utbm.ia54.antcolony.message.PheromoneChange
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
 import io.sarl.util.OpenEventSpace
 import io.sarl.util.OpenEventSpaceSpecification
 import java.util.UUID
-import fr.utbm.ia54.antcolony.message.GraphChange
-import fr.utbm.ia54.antcolony.message.PheromoneChange
 import org.graphstream.graph.Graph
 
 /**
@@ -31,7 +31,7 @@ agent GraphColorizerAgent {
 
 	//Get the graph sent by the environnement to update colors
 	on PheromoneChange {
-		graph =colorGraph(occurrence.graph)
+		graph =colorGraph(new GraphStreamToGraph().Graph2GS(occurrence.graph))
 		var evt = new GraphChange(graph)
 		space.emit(evt)
 	}

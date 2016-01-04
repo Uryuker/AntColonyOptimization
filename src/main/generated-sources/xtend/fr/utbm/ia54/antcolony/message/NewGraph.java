@@ -1,8 +1,9 @@
 package fr.utbm.ia54.antcolony.message;
 
+import fr.utbm.ia54.antcolony.graphe.Graph;
+import fr.utbm.ia54.antcolony.gui.GraphStreamToGraph;
 import io.sarl.lang.annotation.Generated;
 import io.sarl.lang.core.Event;
-import org.graphstream.graph.Graph;
 
 /**
  * @author quentin barthelemy
@@ -11,8 +12,10 @@ import org.graphstream.graph.Graph;
 public class NewGraph extends Event {
   public Graph graph;
   
-  public NewGraph(final Graph g) {
-    this.graph = g;
+  public NewGraph(final org.graphstream.graph.Graph g) {
+    GraphStreamToGraph _graphStreamToGraph = new GraphStreamToGraph();
+    Graph _GS2Graph = _graphStreamToGraph.GS2Graph(g);
+    this.graph = _GS2Graph;
   }
   
   @Override

@@ -3,7 +3,8 @@
  */
 package fr.utbm.ia54.antcolony.message
 
-import org.graphstream.graph.Graph
+import fr.utbm.ia54.antcolony.graphe.Graph
+import fr.utbm.ia54.antcolony.gui.GraphStreamToGraph
 
 /**
  * @author quentin barthelemy
@@ -11,7 +12,8 @@ import org.graphstream.graph.Graph
  */
 event NewGraph{
 	var graph : Graph
-	new(g:Graph){
-		graph=g
+	//Convert graphstream to graph
+	new(g:org.graphstream.graph.Graph){
+		graph=new GraphStreamToGraph().GS2Graph(g)
 	}
 }

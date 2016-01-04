@@ -185,6 +185,59 @@ public class XMLToGraph {
 		return graph;
 		
 	}
+	public fr.utbm.ia54.antcolony.graphe.Graph XML2Graph(){
+		fr.utbm.ia54.antcolony.graphe.Graph graph = new fr.utbm.ia54.antcolony.graphe.Graph();
+		try {
+			// Open the XML file
+			File fXmlFile = new File("src/graph.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			EntityResolver resolver = new EntityResolver () {
+				public InputSource resolveEntity (String publicId, String systemId) {
+				String empty = "";
+				ByteArrayInputStream bais = new ByteArrayInputStream(empty.getBytes());
+				return new InputSource(bais);
+				}
+				};
+				dBuilder.setEntityResolver(resolver); 
+			Document doc = dBuilder.parse(fXmlFile);
+			doc.getDocumentElement().normalize();
+
+			// Get the list of nodes and add them to the GraphStream graph
+			NodeList nList = doc.getElementsByTagName("Node");
+			if(nList!=null){
+				for (int temp = 0; temp < nList.getLength(); temp++) {
+	
+					Node nNode = nList.item(temp);
+	
+					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	
+						Element eElement = (Element) nNode;
+						graph.addNode(new fr.utbm.ia54.antcolony.graphe.Node(eElement.getElementsByTagName("Id").item(0).getTextContent()), true);
+					}
+				}
+			}
+
+			// Get the edges and add them to the GraphStream graph
+			NodeList eList = doc.getElementsByTagName("Edge");
+			for (int temp = 0; temp < eList.getLength(); temp++) {
+				Node nNode = eList.item(temp);
+
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					// adding the edge
+					graph.addEdge(graph.getNode(eElement.getElementsByTagName("IdStart").item(0).getTextContent()),
+							graph.getNode(eElement.getElementsByTagName("IdEnd").item(0).getTextContent()),
+							Integer.parseInt(eElement.getElementsByTagName("Length").item(0).getTextContent()));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return graph;
+		
+	}
 
 	public void GraphToXML(Graph graph) {
 		Document dom;

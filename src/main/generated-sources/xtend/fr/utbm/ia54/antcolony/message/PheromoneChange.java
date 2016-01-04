@@ -1,8 +1,8 @@
 package fr.utbm.ia54.antcolony.message;
 
+import fr.utbm.ia54.antcolony.graphe.Graph;
 import io.sarl.lang.annotation.Generated;
 import io.sarl.lang.core.Event;
-import org.graphstream.graph.Graph;
 
 /**
  * @author quentin barthelemy
