@@ -5,16 +5,24 @@ package fr.utbm.ia54.antcolony.organization
 
 import io.sarl.core.Initialize
 import io.sarl.core.Destroy
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.util.OpenEventSpace
+import io.sarl.util.OpenEventSpaceSpecification
+import java.util.UUID
 
 agent Ant {
 	
-	uses move,setPheromon,searchNextEdge
+	uses DefaultContextInteractions, Behaviors,Capicities
+	
+	var space : OpenEventSpace
 	
 	on Initialize {
+		space = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification),
+		occurrence.parameters.get(0) as UUID)
 		
-	}
-	on Destroy{
-		
+		space.register(asEventListener())
 	}
 	
 	

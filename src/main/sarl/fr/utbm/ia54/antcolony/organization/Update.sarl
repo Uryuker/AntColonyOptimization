@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fr.utbm.ia54.antcolony.organization
+
+import org.graphstream.graph.Graph
+
+event Update{
+	var graph : Graph
+	
+	new(newGraph:Graph){
+		graph = newGraph
+	}
+	
+}

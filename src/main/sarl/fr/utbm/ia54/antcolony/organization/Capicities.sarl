@@ -3,10 +3,10 @@
  */
 package fr.utbm.ia54.antcolony.organization
 
-import io.sarl.core.Behaviors
-import io.sarl.core.DefaultContextInteractions
-import io.sarl.core.Lifecycle
 
+import fr.utbm.ia54.antcolony.graphe.Node;
+import fr.utbm.ia54.antcolony.graphe.Edge;
+import fr.utbm.ia54.antcolony.graphe.Graph;
 
 capacity Capicities {
 	
@@ -17,33 +17,31 @@ capacity Capicities {
 
 capacity EnvCapacities{
 	
-	def updatePheromon()
-	def updateGraph()
-	def listNextNode()
+	def updatePheromon(graph : Graph) : Graph
+	def updateGraph(graph : Graph) : Graph
 	
 }
 
 skill EnvSkill implements EnvCapacities{
 	
-	override updatePheromon(){
+	def updatePheromon(graph : Graph) : Graph{
 		
-		var listEdge = graph.listEdge()
-		
-		for(e : listEdge){
-			
-			e.pheromon = ((e.pheromon * tauxEvap )+ (e.AntCount() * 0.1))   
+		for(Edge e : graph.getEdges()){
+			double ph = (e.getPheromon * tauxEvap )+ (e.AntCount() * 0.1) 
+			e.setPheromon(ph)
 		} 
+		return graph
+	}
+	
+	def updateGraph(graph : Graph) : Graph {
 		
+		for(a : graph.ListAnt){}
+			Node n = a.searchNextEdge()
+			a.move(n)
+		}
+		return graph
 	}
-	
-	override updateGraph {
-		// TODO Auto-generated action.
-	}
-	
-	override listNextNode {
-		// TODO Auto-generated action.
-	}
-	
+		
 }
 
 
@@ -55,27 +53,29 @@ skill Skill implements Capicities{
 	
 	
 	
-	override move(n: Node){
+	override move(e:Edge, n: Node){
+		e.setnbAnt = e.getnbAnt +1;
 		previousNode = actualNode
 		actualNode = n
+		
 	}
 	
-	override searchNextEdge(){
+	override searchNextEdge() : Node {
 		//algo recherche prochain edge
-		var listEdge = actualNode.listEdge()
+		var listEdge = actualNode.getNeighbors()
 		var nextEdge : new Edge()
 		var p : float
+		
 		for(e : listEdge)) {
+			
 			float max
 			max = p
-			p = (e.pheromon * 1/e.distance) / (listEdge.totalPheromon * 1/listEdge.totalDistance)
+			p = (e.getPheromon * 1/e.getweight() / (graph.totalPheromon * 1/graph.totalDistance)
 			if max < p{
 				max = p
 				nextEdge = e
 			}
 		}
-		
+		return nextEdge.getOppositeNode(actualNode)
 		}
-	
-	
 }
